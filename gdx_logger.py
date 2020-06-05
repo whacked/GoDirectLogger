@@ -1,13 +1,14 @@
 #!/usr/bin/env python
+import logging
+logging.basicConfig(format="%(asctime)-15s  %(message)s")
+log = logging.getLogger('GoDirectReader')
+log.setLevel(logging.DEBUG)
+
 from gdx import gdx
 import time
 import sqlite3
-import logging
 import configparser
 
-logging.basicConfig(format="%(asctime)-15s  %(message)s")
-log = logging.getLogger('GODirectReader')
-log.setLevel(logging.DEBUG)
 
 config = configparser.ConfigParser()
 config.read('settings.ini')
