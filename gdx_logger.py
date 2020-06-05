@@ -24,10 +24,17 @@ gdx = gdx.gdx()
 
 def open_device():
     log.info('attempting to connect over USB')
-    gdx.open_usb()
+    try:
+        gdx.open_usb()
+    except OSError as _:
+        gdx.devices = []
+        pass
     if not gdx.devices:
         log.info('attempting to connect over BLE')
-        gdx.open_ble(config['device_id'])
+        try:
+            gdx.open_ble(config['device_id'])
+        except OSError as _:
+            return False
     # select sensors for GDX-RB 0K1007T6 BLE -41
     # 1: Force (N)
     # 2: Respiration Rate (bpm)
@@ -70,7 +77,6 @@ try:
         except OSError:
             for nth_try in range(1, RETRY_LIMIT):
                 log.error('lost connection; retrying {} / {}'.format(nth_try, RETRY_LIMIT))
-                RETRY_LIMIT -= 1
                 if open_device():
                     break
                 else:
